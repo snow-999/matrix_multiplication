@@ -1,15 +1,19 @@
 package thread;
 
-import matrix_maker.MatrixMaker;
+import matrix_services.MatrixServices;
+
+import java.util.List;
 
 public class MyThread extends Thread{
 
-    private int[] rows;
-    private MatrixMaker matrix;
+    private List<Integer> rows;
+    private MatrixServices matrix;
+    private MatrixServices result;
 
-    public MyThread(int[] rows, MatrixMaker matrix) {
+    public MyThread(List<Integer> rows, MatrixServices matrix, MatrixServices result) {
         this.rows = rows;
         this.matrix = matrix;
+        this.result = result;
     }
 
     @Override
