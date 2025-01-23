@@ -57,19 +57,4 @@ public class MatrixServices {
         }
         return col;
     }
-
-    public List<Integer> getMultiplied(List<Integer> rowNumbers, int colsNumber) {
-        boolean wrongConditions = colsNumber <= 0 || colsNumber > cols;
-        if (wrongConditions) {
-            throw new ArrayIndexOutOfBoundsException("out of matrix size");
-        }
-
-        for (int i = 0; i < colsNumber; i++) {
-            List<Integer> col = getCol(i);
-            for (int j = 0; j < rowNumbers.size(); j++) {
-                numbers.add(rowNumbers.get(j) * col.get(j));
-            }
-        }
-        return numbers;
-    }
 }
