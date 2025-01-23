@@ -44,22 +44,21 @@ public class Main {
 
         // make the final matrix
         List<Integer> finalMatrixNumbers = new ArrayList<>();
-        for (int i = 0; i < mat1RowsNumber; i++) {
-            List<Integer> row = matrix1.getRow(i);
-            for (int j = 0; j < mat2ColsNumber; j++) {
-                int temp = 0;
-                List<Integer> col = matrix2.getCol(j);
-                for (int k = 0; k < row.size(); k++) {
-                    temp += row.get(k) * col.get(k);
-                }
-                finalMatrixNumbers.add(temp);
-            }
-        }
         List<Integer> syschorisedList = Collections.synchronizedList(finalMatrixNumbers);
         MatrixServices finalMatrix = new MatrixServices(mat1RowsNumber, mat2ColsNumber, syschorisedList);
 
+            for (int i = 0; i < mat1RowsNumber; i++) {
+                MyThread thread = new MyThread(matrix1.getRow(i), matrix2, finalMatrix);
+                thread.start();
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
         finalMatrix.addToMatrix();
-        System.out.println("Here Is The Fianl Matrix");
+        System.out.println("Here Is The Final Matrix");
         finalMatrix.printMatrix();
     }
 }

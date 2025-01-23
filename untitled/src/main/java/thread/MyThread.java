@@ -18,8 +18,6 @@ public class MyThread extends Thread{
 
     @Override
     public void run() {
-        int i = 0;
-        while (i < row.size()) {
             for (int j = 0; j < matrixTwo.cols; j++) {
                 int temp = 0;
                 List<Integer> col = matrixTwo.getCol(j);
@@ -28,7 +26,5 @@ public class MyThread extends Thread{
                 }
                 finalMatrix.numbers.add(temp);
             }
-            i++;
-        }
     }
 }
