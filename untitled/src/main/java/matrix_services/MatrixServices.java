@@ -18,7 +18,7 @@ public class MatrixServices {
     }
 
     public void addToMatrix() {
-        boolean wrongConditionMakingMatrix = numbers.size() != rows * cols;
+        boolean wrongConditionMakingMatrix = numbers.size() > rows * cols;
         if (wrongConditionMakingMatrix) {
             throw new IndexOutOfBoundsException("out of matrix size");
         }

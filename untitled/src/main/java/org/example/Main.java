@@ -38,22 +38,25 @@ public class Main {
         for (int i = 0; i < mat2Size; i++) {
             mat2Numbers.add(mat2Scanner.nextInt());
         }
+
         MatrixServices matrix2 = new MatrixServices(mat2RowsNumber, mat2ColsNumber, mat2Numbers);
         matrix2.addToMatrix();
 
         // make the final matrix
-        int finalMatrixSize = mat1RowsNumber * mat2ColsNumber;
         List<Integer> finalMatrixNumbers = new ArrayList<>();
+        for (int i = 0; i < mat1RowsNumber; i++) {
+            List<Integer> row = matrix1.getRow(i);
+            for (int j = 0; j < mat2ColsNumber; j++) {
+                int temp = 0;
+                List<Integer> col = matrix2.getCol(j);
+                for (int k = 0; k < row.size(); k++) {
+                    temp += row.get(k) * col.get(k);
+                }
+                finalMatrixNumbers.add(temp);
+            }
+        }
         List<Integer> syschorisedList = Collections.synchronizedList(finalMatrixNumbers);
         MatrixServices finalMatrix = new MatrixServices(mat1RowsNumber, mat2ColsNumber, syschorisedList);
-
-        MyThread threadOne = new MyThread(matrix1, matrix2, finalMatrix);
-        threadOne.start();
-        try {
-            threadOne.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
 
         finalMatrix.addToMatrix();
         System.out.println(Arrays.deepToString(finalMatrix.matrix));

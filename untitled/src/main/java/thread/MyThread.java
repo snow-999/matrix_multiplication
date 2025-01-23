@@ -6,12 +6,12 @@ import java.util.List;
 
 public class MyThread extends Thread{
 
-    private MatrixServices matrixOne;
+    private List<Integer> row;
     private MatrixServices matrixTwo;
     private MatrixServices finalMatrix;
 
-    public MyThread(MatrixServices matrixOne, MatrixServices matrixTwo, MatrixServices finalMatrix) {
-        this.matrixOne = matrixOne;
+    public MyThread(List<Integer> row, MatrixServices matrixTwo, MatrixServices finalMatrix) {
+        this.row = row;
         this.matrixTwo = matrixTwo;
         this.finalMatrix = finalMatrix;
     }
@@ -19,8 +19,7 @@ public class MyThread extends Thread{
     @Override
     public void run() {
         int i = 0;
-        while (i < matrixOne.rows) {
-            List<Integer> row = matrixOne.getRow(i);
+        while (i < row.size()) {
             for (int j = 0; j < matrixTwo.cols; j++) {
                 int temp = 0;
                 List<Integer> col = matrixTwo.getCol(j);
