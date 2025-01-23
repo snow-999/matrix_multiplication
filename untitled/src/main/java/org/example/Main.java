@@ -6,54 +6,56 @@ import thread.MyThread;
 import java.util.*;
 
 public class Main {
+
+    public static MatrixServices scanMatrix() {
+        Scanner matScanner = new Scanner(System.in);
+        System.out.println("Enter Matrix Rows Number");
+        int matRowsNumber = matScanner.nextInt();
+        System.out.println("Enter Matrix Cols Number");
+        int matColsNumber = matScanner.nextInt();
+        int matSize = matRowsNumber * matColsNumber;
+        List<Integer> matNumbers = new ArrayList<>();
+        System.out.println("Enter Matrix Number (Your Matrix Should Contain " + matSize +")");
+        for (int i = 0; i < matSize; i++) {
+            matNumbers.add(matScanner.nextInt());
+        }
+        MatrixServices matrix = new MatrixServices(matRowsNumber, matColsNumber, matNumbers);
+        matrix.addToMatrix();
+        return matrix;
+    }
+
     public static void main(String[] args) {
 
         // make the first matrix
-        Scanner mat1Scanner = new Scanner(System.in);
-        System.out.println("Enter First Matrix Rows Number");
-        int mat1RowsNumber = mat1Scanner.nextInt();
-        System.out.println("Enter First Matrix Cols Number");
-        int mat1ColsNumber = mat1Scanner.nextInt();
-        int mat1Size = mat1RowsNumber * mat1ColsNumber;
-        List<Integer> mat1Numbers = new ArrayList<>();
-        System.out.println("Enter First Matrix Number (Your Matrix Should Contain )" + mat1Size);
-        for (int i = 0; i < mat1Size; i++) {
-            mat1Numbers.add(mat1Scanner.nextInt());
-        }
-
-        MatrixServices matrix1 = new MatrixServices(mat1RowsNumber, mat1ColsNumber, mat1Numbers);
-        matrix1.addToMatrix();
+        MatrixServices firstMatrix = scanMatrix();
+        firstMatrix.printMatrix();
 
         System.out.println();
-
         System.out.println("===================");
 
 //      make the second matrix
-        Scanner mat2Scanner = new Scanner(System.in);
-        System.out.println("Enter Second Matrix Rows Number");
-        int mat2RowsNumber = mat2Scanner.nextInt();
-        System.out.println("Enter Second Matrix Cols Number");
-        int mat2ColsNumber = mat2Scanner.nextInt();
-        int mat2Size = mat2RowsNumber * mat2ColsNumber;
-        List<Integer> mat2Numbers = new ArrayList<>();
-        System.out.println("Enter Second Matrix Number (Your Matrix Should Contain )" + mat2Size);
-        for (int i = 0; i < mat2Size; i++) {
-            mat2Numbers.add(mat2Scanner.nextInt());
+        MatrixServices secondMatrix = scanMatrix();
+
+        // check if two matrices could be multiplied
+        if (firstMatrix.cols != secondMatrix.rows) {
+            System.out.println("Can't Multiplication These Matrix");
+            return;
         }
 
-        MatrixServices matrix2 = new MatrixServices(mat2RowsNumber, mat2ColsNumber, mat2Numbers);
-        matrix2.addToMatrix();
+        List<Integer> syschorisedList = Collections.synchronizedList(new ArrayList<>());
 
-        // make the final matrix
-        List<Integer> finalMatrixNumbers = new ArrayList<>();
-        List<Integer> syschorisedList = Collections.synchronizedList(finalMatrixNumbers);
-        MatrixServices finalMatrix = new MatrixServices(mat1RowsNumber, mat2ColsNumber, syschorisedList);
+        // make final matrix
+        MatrixServices finalMatrix = new MatrixServices(firstMatrix.rows, secondMatrix.cols, syschorisedList);
 
-        for (int i = 0; i < mat1RowsNumber; i++) {
-            MyThread thread = new MyThread(matrix1.getRow(i), matrix2, finalMatrix);
-            thread.start();
+        List<MyThread> threads = new ArrayList<>(firstMatrix.rows);
+        for (int i = 0; i < firstMatrix.rows; i++) {
+            threads.add(new MyThread(firstMatrix.getRow(i), secondMatrix, finalMatrix));
+            threads.get(i).start();
+        }
+
+        for (MyThread th : threads) {
             try {
-                thread.join();
+                th.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -62,5 +64,7 @@ public class Main {
         finalMatrix.addToMatrix();
         System.out.println("Here Is The Result of Multiplication Two Matrices");
         finalMatrix.printMatrix();
+
+
     }
 }

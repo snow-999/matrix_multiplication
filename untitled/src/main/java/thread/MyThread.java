@@ -18,11 +18,11 @@ public class MyThread extends Thread{
 
     @Override
     public void run() {
-            for (int j = 0; j < matrixTwo.cols; j++) {
+            for (int i = 0; i < matrixTwo.cols; i++) {
                 int temp = 0;
-                List<Integer> col = matrixTwo.getCol(j);
-                for (int k = 0; k < row.size(); k++) {
-                    temp += row.get(k) * col.get(k);
+                List<Integer> col = matrixTwo.getCol(i);
+                for (int j = 0; j < row.size(); j++) {
+                    temp += row.get(j) * col.get(j);
                 }
                 finalMatrix.numbers.add(temp);
             }
