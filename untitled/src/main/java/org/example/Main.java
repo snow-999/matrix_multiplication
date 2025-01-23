@@ -59,6 +59,7 @@ public class Main {
         MatrixServices finalMatrix = new MatrixServices(mat1RowsNumber, mat2ColsNumber, syschorisedList);
 
         finalMatrix.addToMatrix();
-        System.out.println(Arrays.deepToString(finalMatrix.matrix));
+        System.out.println("Here Is The Fianl Matrix");
+        finalMatrix.printMatrix();
     }
 }

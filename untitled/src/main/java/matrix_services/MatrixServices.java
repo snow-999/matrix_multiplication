@@ -18,7 +18,7 @@ public class MatrixServices {
     }
 
     public void addToMatrix() {
-        boolean wrongConditionMakingMatrix = numbers.size() > rows * cols;
+        boolean wrongConditionMakingMatrix = numbers.size() != rows * cols;
         if (wrongConditionMakingMatrix) {
             throw new IndexOutOfBoundsException("out of matrix size");
         }
@@ -34,9 +34,11 @@ public class MatrixServices {
     public void printMatrix() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                System.out.print("[" + matrix[i][j] + "]");
+                System.out.print(matrix[i][j] + " ");
             }
-            System.out.println();
+            if (i != rows - 1) {
+                System.out.println();
+            }
         }
     }
 
