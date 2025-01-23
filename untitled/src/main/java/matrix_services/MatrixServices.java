@@ -5,8 +5,8 @@ import java.util.List;
 
 public class MatrixServices {
 
-    private final int rows;
-    private final int cols;
+    public final int rows;
+    public final int cols;
     public final List<Integer> numbers;
     public int[][] matrix;
 
@@ -18,7 +18,7 @@ public class MatrixServices {
     }
 
     public void addToMatrix() {
-        boolean wrongConditionMakingMatrix = numbers.size()!= rows * cols;
+        boolean wrongConditionMakingMatrix = numbers.size() != rows * cols;
         if (wrongConditionMakingMatrix) {
             throw new IndexOutOfBoundsException("out of matrix size");
         }
@@ -41,26 +41,33 @@ public class MatrixServices {
     }
 
     public List<Integer> getRow(int rowNumber) {
-        boolean wrongConditions = rowNumber <= 0 || rowNumber > rows;
-        if (wrongConditions) {
-            throw new ArrayIndexOutOfBoundsException("out of matrix size");
-        }
         List<Integer> row = new ArrayList<>();
         for (int i = 0; i < cols; i++) {
-            row.add(matrix[rowNumber - 1][i]);
+            row.add(matrix[rowNumber][i]);
         }
         return row;
     }
 
     public List<Integer> getCol(int colNumber) {
-        boolean wrongConditions = colNumber <= 0 || colNumber > cols;
+        List<Integer> col = new ArrayList<>();
+        for (int i = 0; i < rows; i++) {
+            col.add(matrix[i][colNumber]);
+        }
+        return col;
+    }
+
+    public List<Integer> getMultiplied(List<Integer> rowNumbers, int colsNumber) {
+        boolean wrongConditions = colsNumber <= 0 || colsNumber > cols;
         if (wrongConditions) {
             throw new ArrayIndexOutOfBoundsException("out of matrix size");
         }
-        List<Integer> col = new ArrayList<>();
-        for (int i = 0; i < rows; i++) {
-            col.add(matrix[i][colNumber - 1]);
+
+        for (int i = 0; i < colsNumber; i++) {
+            List<Integer> col = getCol(i);
+            for (int j = 0; j < rowNumbers.size(); j++) {
+                numbers.add(rowNumbers.get(j) * col.get(j));
+            }
         }
-        return col;
+        return numbers;
     }
 }

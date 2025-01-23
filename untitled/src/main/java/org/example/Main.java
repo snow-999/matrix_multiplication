@@ -1,10 +1,9 @@
 package org.example;
 
 import matrix_services.MatrixServices;
+import thread.MyThread;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -21,10 +20,9 @@ public class Main {
         for (int i = 0; i < mat1Size; i++) {
             matNumbers.add(mat1Scanner.nextInt());
         }
-//        mat1Scanner.close();
+
         MatrixServices matrix1 = new MatrixServices(mat1RowsNumber, mat1ColsNumber, matNumbers);
         matrix1.addToMatrix();
-        matrix1.printMatrix();
 
         System.out.println("===================");
 
@@ -42,28 +40,22 @@ public class Main {
         }
         MatrixServices matrix2 = new MatrixServices(mat2RowsNumber, mat2ColsNumber, mat2Numbers);
         matrix2.addToMatrix();
-        matrix2.printMatrix();
 
-        // final matrix (result)
-//        int finalMatRows= 2;
-//        int finalMatCols= 3;
-//        List<Integer> synchronizedList = Collections.synchronizedList(new ArrayList<>());
-//        MatrixMaker finalMat = new MatrixMaker(finalMatRows, finalMatCols, synchronizedList);
-//        finalMat.addToMatrix();
+        // make the final matrix
+        int finalMatrixSize = mat1RowsNumber * mat2ColsNumber;
+        List<Integer> finalMatrixNumbers = new ArrayList<>();
+        List<Integer> syschorisedList = Collections.synchronizedList(finalMatrixNumbers);
+        MatrixServices finalMatrix = new MatrixServices(mat1RowsNumber, mat2ColsNumber, syschorisedList);
 
-        System.out.println("=======================");
-        List<Integer> row = matrix1.getRow(1);
-        List<Integer> col = matrix1.getCol(1);
-        System.out.println(col);
+        MyThread threadOne = new MyThread(matrix1, matrix2, finalMatrix);
+        threadOne.start();
+        try {
+            threadOne.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-
-//        MyThread th1 = new MyThread(row, matrix2, finalMat);
-
-
-
-
-
-
-
+        finalMatrix.addToMatrix();
+        System.out.println(Arrays.deepToString(finalMatrix.matrix));
     }
 }
