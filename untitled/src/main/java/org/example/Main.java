@@ -1,13 +1,13 @@
 package org.example;
 
-import matrix_services.MatrixServices;
+import matrix_services.MatrixService;
 import thread.MyThread;
 
 import java.util.*;
 
 public class Main {
 
-    public static MatrixServices scanMatrix() {
+    public static MatrixService scanMatrix() {
         Scanner matScanner = new Scanner(System.in);
         System.out.println("Enter Matrix Rows Number");
         int matRowsNumber = matScanner.nextInt();
@@ -19,7 +19,7 @@ public class Main {
         for (int i = 0; i < matSize; i++) {
             matNumbers.add(matScanner.nextInt());
         }
-        MatrixServices matrix = new MatrixServices(matRowsNumber, matColsNumber, matNumbers);
+        MatrixService matrix = new MatrixService(matRowsNumber, matColsNumber, matNumbers);
         matrix.addToMatrix();
         return matrix;
     }
@@ -27,14 +27,22 @@ public class Main {
     public static void main(String[] args) {
 
         // make the first matrix
-        MatrixServices firstMatrix = scanMatrix();
-        firstMatrix.printMatrix();
+        /*
+         * 2 3 1
+         * 2 -7 4
+         */
+        MatrixService firstMatrix = scanMatrix();
 
         System.out.println();
         System.out.println("===================");
 
 //      make the second matrix
-        MatrixServices secondMatrix = scanMatrix();
+        /*
+         * 3 4 5
+         * 1 1 4
+         * 2 1 4
+         **/
+        MatrixService secondMatrix = scanMatrix();
 
         // check if two matrices could be multiplied
         if (firstMatrix.cols != secondMatrix.rows) {
@@ -42,29 +50,32 @@ public class Main {
             return;
         }
 
-        List<Integer> syschorisedList = Collections.synchronizedList(new ArrayList<>());
+        int finalMatrixSize = firstMatrix.cols * secondMatrix.rows;
+        List<Integer> syschorisedList = Collections.synchronizedList(new ArrayList<>(finalMatrixSize));
 
         // make final matrix
-        MatrixServices finalMatrix = new MatrixServices(firstMatrix.rows, secondMatrix.cols, syschorisedList);
+        MatrixService finalMatrix = new MatrixService(firstMatrix.rows, secondMatrix.cols, syschorisedList);
 
-        List<MyThread> threads = new ArrayList<>(firstMatrix.rows);
+        List<MyThread> threads = new ArrayList<>();
         for (int i = 0; i < firstMatrix.rows; i++) {
-            threads.add(new MyThread(firstMatrix.getRow(i), secondMatrix, finalMatrix));
-            threads.get(i).start();
+            for (int j = 0; j < secondMatrix.cols; j++) {
+                threads.add(new MyThread(firstMatrix.getRow(i), secondMatrix.getCol(j), finalMatrix, i, j));
+            }
         }
 
-        for (MyThread th : threads) {
+        for (MyThread myThread : threads) {
+            myThread.start();
+        }
+
+        for (MyThread thread : threads) {
             try {
-                th.join();
+                thread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        finalMatrix.addToMatrix();
         System.out.println("Here Is The Result of Multiplication Two Matrices");
         finalMatrix.printMatrix();
-
-
     }
 }

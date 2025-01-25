@@ -3,14 +3,14 @@ package matrix_services;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatrixServices {
+public class MatrixService {
 
     public final int rows;
     public final int cols;
     public final List<Integer> numbers;
     public int[][] matrix;
 
-    public MatrixServices(int rows, int cols, List<Integer> numbers) {
+    public MatrixService(int rows, int cols, List<Integer> numbers) {
         this.rows = rows;
         this.cols = cols;
         this.numbers = numbers;
