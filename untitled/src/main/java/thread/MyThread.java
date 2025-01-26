@@ -22,7 +22,6 @@ public class MyThread extends Thread{
 
     @Override
     public void run() {
-        System.out.println(col);
         int temp = 0;
         for (int j = 0; j < row.size(); j++) {
             temp += row.get(j) * col.get(j);

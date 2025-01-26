@@ -9,18 +9,23 @@ public class Main {
 
     public static MatrixService scanMatrix() {
         Scanner matScanner = new Scanner(System.in);
+
         System.out.println("Enter Matrix Rows Number");
         int matRowsNumber = matScanner.nextInt();
+
         System.out.println("Enter Matrix Cols Number");
         int matColsNumber = matScanner.nextInt();
+
+        MatrixService matrix = new MatrixService(matRowsNumber, matColsNumber);
         int matSize = matRowsNumber * matColsNumber;
-        List<Integer> matNumbers = new ArrayList<>();
+
         System.out.println("Enter Matrix Number (Your Matrix Should Contain " + matSize +")");
-        for (int i = 0; i < matSize; i++) {
-            matNumbers.add(matScanner.nextInt());
+        for (int i = 0; i < matrix.rows; i++) {
+            for (int j = 0; j < matrix.cols; j++) {
+                matrix.matrix[i][j] = matScanner.nextInt();
+            }
         }
-        MatrixService matrix = new MatrixService(matRowsNumber, matColsNumber, matNumbers);
-        matrix.addToMatrix();
+
         return matrix;
     }
 
@@ -50,11 +55,8 @@ public class Main {
             return;
         }
 
-        int finalMatrixSize = firstMatrix.cols * secondMatrix.rows;
-        List<Integer> syschorisedList = Collections.synchronizedList(new ArrayList<>(finalMatrixSize));
-
         // make final matrix
-        MatrixService finalMatrix = new MatrixService(firstMatrix.rows, secondMatrix.cols, syschorisedList);
+        MatrixService finalMatrix = new MatrixService(firstMatrix.rows, secondMatrix.cols);
 
         List<MyThread> threads = new ArrayList<>();
         for (int i = 0; i < firstMatrix.rows; i++) {

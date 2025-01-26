@@ -7,28 +7,12 @@ public class MatrixService {
 
     public final int rows;
     public final int cols;
-    public final List<Integer> numbers;
     public int[][] matrix;
 
-    public MatrixService(int rows, int cols, List<Integer> numbers) {
+    public MatrixService(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
-        this.numbers = numbers;
         this.matrix = new int[rows][cols];
-    }
-
-    public void addToMatrix() {
-        boolean wrongConditionMakingMatrix = numbers.size() != rows * cols;
-        if (wrongConditionMakingMatrix) {
-            throw new IndexOutOfBoundsException("out of matrix size");
-        }
-
-        int index = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                matrix[i][j] = numbers.get(index++);
-            }
-        }
     }
 
     public void printMatrix() {
